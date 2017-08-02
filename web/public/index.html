@@ -1,12 +1,68 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <link rel="stylesheet" type="text/css" href="styles.css" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 </head>
+
 <body>
   Enter a URL here:
-  <form method="POST">
-    <input type="input" name="url"></input>
+  <form method="POST" action='/' id='target'>
+    <input type="input" name="url" id="inputURL"></input>
+    <br>
   </form>
+  <button id='buttonSubmit' type="submit" class="myButton" name='submit'>
+    Submit
+  </button>
+
+  <script>
+    var send = function(url)
+    {
+      $.ajax(
+      {
+        url: 'http://127.0.0.1:8080',
+        type: 'POST',
+        data: url,
+        success: function(data)
+        {
+          console.log('success');
+        },
+        error: function(error)
+        {
+          console.error('chatterbox: Failed to send message', error);
+        }
+      });
+    }
+
+    $('#target').submit(function(event)
+    {
+      console.log('clicked', event.currentTarget.firstElementChild.value);
+      send(event.currentTarget.firstElementChild.value);
+      event.preventDefault();
+      $('#inputURL').val('');
+    });
+
+    $('#buttonSubmit').click(function()
+    {
+      $('#target').submit();
+    })
+  </script>
+
+
+
 </body>
+
 </html>
+
+
+
+
+
+
+
+
+<!--       <form action="#" id="send" method="post"> -->
+<!--         <input type="text" name="message" id="message"/> -->
+<!--         <input type="submit" name="submit" class="submit"/> -->
+<!--       </form> -->

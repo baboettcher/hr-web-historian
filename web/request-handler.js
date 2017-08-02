@@ -19,7 +19,7 @@ var handleGetRequest = function(req, res) {
     var url = archive.paths.siteAssets + '/index.html';
 
 
-    fs.readFile(url, 'utf8', (err, data) =>     {
+    fs.readFile(url, 'utf8', (err, data) => {
       if (err) {
         console.error('ERROR: ', err);
       }
@@ -33,6 +33,32 @@ var handleGetRequest = function(req, res) {
 
 
 var handlePostRequest = function(req, res) {
+
+  var body = "";
+  req.on('data', function(chunk) {
+    body += chunk;
+  });
+  req.on('end', function() {
+    console.log('POSTed: ' + body);
+    res.writeHead(200);
+    res.end();
+  });
+
+
+
+  console.log("-------------->", body);
+  // take user's request and see if it in site.txt file
+  var listOfUrls = archive.readListOfUrls();
+  var isUrlInList = archive.isUrlInList(req.url);
+
+  // if not in the file, add url to the file
+  if (!isUrlInList) {
+    archive.addUrlToList(req.url);
+    archive.downloadUrls(req.url);
+  }
+
+  // else DO LOTS MORE!!!
+
 
 };
 
