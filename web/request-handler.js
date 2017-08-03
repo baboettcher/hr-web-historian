@@ -18,7 +18,6 @@ var handleGetRequest = function(req, res) {
   } else {
     var url = archive.paths.siteAssets + '/index.html';
 
-
     fs.readFile(url, 'utf8', (err, data) => {
       if (err) {
         console.error('ERROR: ', err);
@@ -34,25 +33,63 @@ var handleGetRequest = function(req, res) {
 
 var handlePostRequest = function(req, res) {
 
-  var url = "";
+  var url = '';
   req.on('data', function(chunk) {
     url += chunk;
   });
+
+
   req.on('end', function() {
-    console.log('POSTed: ' + url);
     res.writeHead(200);
+    // console.log('POSTed URL: ' + url);
+
+
+
+
+    archive.readListOfUrls( (siteList) => {
+
+      archive.isUrlInList(url, siteList, (siteExists) => {
+        console.log("siteExists", siteExists);
+
+        if (!siteExists) {
+          archive.addUrlToList(url, (siteWritten) => {
+            console.log("successfully wrote file", siteWritten)
+
+          });
+        }
+
+      });     // return T or
+
+      // var siteExists = siteList.includes(url);
+      // console.log(siteExists);
+
+
+        // take url from above and see if it is in siteList
+          //
+    });
+
+
+
+    // archive.isUrlInList(url, (err, data) => {
+    //   if (err) {
+    //     return (err, null);
+    //   }
+    //   return (data);
+    // });
+
+  // // if not in the file, add url to the file
+  //   if (!isUrlInList) {
+  //     archive.addUrlToList(req.url);
+  //     archive.downloadUrls(req.url);
+  //   }
+
+
     res.end();
   });
 
   // take user's request and see if it in site.txt file
-  var listOfUrls = archive.readListOfUrls();
-  var isUrlInList = archive.isUrlInList(req.url);
 
-  // if not in the file, add url to the file
-  if (!isUrlInList) {
-    archive.addUrlToList(req.url);
-    archive.downloadUrls(req.url);
-  }
+
 
   // else DO LOTS MORE!!!
 
