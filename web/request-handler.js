@@ -34,19 +34,16 @@ var handleGetRequest = function(req, res) {
 
 var handlePostRequest = function(req, res) {
 
-  var body = "";
+  var url = "";
   req.on('data', function(chunk) {
-    body += chunk;
+    url += chunk;
   });
   req.on('end', function() {
-    console.log('POSTed: ' + body);
+    console.log('POSTed: ' + url);
     res.writeHead(200);
     res.end();
   });
 
-
-
-  console.log("-------------->", body);
   // take user's request and see if it in site.txt file
   var listOfUrls = archive.readListOfUrls();
   var isUrlInList = archive.isUrlInList(req.url);
