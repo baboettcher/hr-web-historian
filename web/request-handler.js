@@ -45,9 +45,9 @@ var handlePostRequest = function(req, res) {
 
 
 
-
     archive.readListOfUrls( (siteList) => {
 
+      console.log('siteList: ', siteList);
       archive.isUrlInList(url, siteList, (siteExists) => {
         console.log("siteExists", siteExists);
 
